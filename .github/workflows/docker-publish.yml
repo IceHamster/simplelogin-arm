@@ -10,10 +10,6 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: simplelogin
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -58,9 +54,9 @@ jobs:
         with:
           context: ./upstream
           file: ./Dockerfile 
-          platforms: linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.VERSION }}
