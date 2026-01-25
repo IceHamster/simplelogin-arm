@@ -6,7 +6,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^upstream-version.txt$"],
+      "managerFilePatterns": ["^upstream-version.txt$"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?) packageName=(?<packageName>.+?)\\s(?<currentValue>.+)"
       ]
