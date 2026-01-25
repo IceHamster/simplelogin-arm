@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^upstream-version.txt$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) packageName=(?<packageName>.+?)\\s(?<currentValue>.+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update _VERSION variables in Dockerfiles",
+      "managerFilePatterns": [
+        "/(^|/|\\.)Dockerfile$/",
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?(?: extractVersion=(?<extractVersion>.+?))?\\s(?:ENV|ARG) .+?_VERSION=(?<currentValue>.+?)\\s"
+      ]
+    }
+  ]
+}

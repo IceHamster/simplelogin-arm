@@ -1,8 +1,11 @@
 # syntax=docker/dockerfile:1
+
+ARG NODE_VERSION_LOCK=10.17.0
+# renovate: datasource=github-releases packageName=astral-sh/uv
 ARG UV_VERSION=0.7.13
 
 # Stage 1: Build frontend assets
-FROM node:10.17.0-alpine AS npm
+FROM node:${NODE_VERSION_LOCK}-alpine AS npm
 WORKDIR /code
 COPY ./static/package*.json /code/static/
 RUN cd /code/static && npm ci
@@ -50,9 +53,9 @@ ENV PATH="/code/.venv/bin:$PATH" \
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl netcat-traditional ca-certificates libre2-10 gnupg
+    apt-get update && apt-get install -y --no-install-recommends \
+    netcat-traditional ca-certificates libre2-10 gnupg && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY . .
 COPY --from=npm /code /code
