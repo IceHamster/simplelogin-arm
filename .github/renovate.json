@@ -8,7 +8,7 @@
       "customType": "regex",
       "managerFilePatterns": ["^upstream-version.txt$"],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-]+?) packageName=(?<packageName>.+?)\\s(?<currentValue>.+)"
+        "# renovate: datasource=(?<datasource>github-releases) packageName=(?<packageName>[^\\s]+)\\n(?<currentValue>[^\\s]+)"
       ]
     },
     {
