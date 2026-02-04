@@ -3,6 +3,13 @@
   "extends": [
     "config:best-practices"
   ],
+"packageRules": [
+    {
+      "description": "Group uv binary and docker image updates",
+      "matchPackageNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv"],
+      "groupName": "astral-sh/uv"
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
