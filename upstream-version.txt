@@ -1,2 +1,2 @@
 # renovate: datasource=github-releases packageName=simple-login/app versioning=semver
-main
+v4.78.1
