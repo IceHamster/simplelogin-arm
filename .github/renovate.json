@@ -3,7 +3,13 @@
   "extends": [
     "config:best-practices"
   ],
-"packageRules": [
+  "packageRules": [
+    {
+      "description": "Disable dockerfile manager for uv image; regex handles ARG UV_VERSION",
+      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
+      "matchManagers": ["dockerfile"],
+      "enabled": false
+    },
     {
       "description": "Group uv binary and docker image updates",
       "matchPackageNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv"],
@@ -13,9 +19,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["^upstream-version.txt$"],
+      "managerFilePatterns": ["upstream-version.txt"],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>github-releases) packageName=(?<packageName>[^\\s]+)\\n(?<currentValue>[^\\s]+)"
+        "# renovate: datasource=(?<datasource>github-releases) packageName=(?<packageName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?\\n(?<currentValue>[^\\s]+)"
       ]
     },
     {
