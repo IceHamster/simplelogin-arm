@@ -11,6 +11,12 @@
       "enabled": false
     },
     {
+      "description": "Node is intentionally pinned; disable dockerfile manager",
+      "matchPackageNames": ["node"],
+      "matchManagers": ["dockerfile"],
+      "enabled": false
+    },
+    {
       "description": "Group uv binary and docker image updates",
       "matchPackageNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv"],
       "groupName": "astral-sh/uv"
