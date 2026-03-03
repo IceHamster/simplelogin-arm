@@ -6,13 +6,21 @@ on:
     paths:
       - 'upstream-version.txt'
       - 'Dockerfile'
+      - 'modern-ui.patch'
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+    inputs:
+      apply_patch:
+        description: 'Apply the modern-ui patch'
+        required: true
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  APPLY_PATCH: false # Set to true to apply the modern-ui patch by default
 
 jobs:
   build:
@@ -32,12 +40,35 @@ jobs:
           VERSION=$(grep -v '^#' upstream-version.txt | xargs)
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Determine if patch should be applied
+        id: patch_config
+        run: |
+          # Use input if available (manual trigger), otherwise use environment variable
+          APPLY="${{ github.event.inputs.apply_patch }}"
+          if [ -z "$APPLY" ]; then
+            APPLY="${{ env.APPLY_PATCH }}"
+          fi
+          echo "apply=$APPLY" >> $GITHUB_OUTPUT
+
+          # Use Node 24 (LTS) when patch is applied, otherwise stick to original 10.17.0
+          if [ "$APPLY" = "true" ]; then
+            echo "node_version=24" >> $GITHUB_OUTPUT
+          else
+            echo "node_version=10.17.0" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout SimpleLogin upstream
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: simple-login/app
           ref: ${{ steps.get_version.outputs.VERSION }}
           path: upstream
+
+      - name: Apply Modern UI Patch
+        if: ${{ steps.patch_config.outputs.apply == 'true' }}
+        run: |
+          cd upstream
+          git apply ../modern-ui.patch
 
       - name: Generate build info
         run: |
@@ -66,7 +97,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ steps.get_version.outputs.VERSION }}
+            type=raw,value=${{ steps.get_version.outputs.VERSION }}${{ steps.patch_config.outputs.apply == 'true' && '-modern-ui' || '' }}
 
       - name: Build and Push
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
@@ -79,3 +110,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NODE_VERSION=${{ steps.patch_config.outputs.node_version }}

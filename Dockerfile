@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
 
-ARG NODE_VERSION_LOCK=10.17.0
+ARG NODE_VERSION=10.17.0
 # renovate: datasource=github-releases packageName=astral-sh/uv
 ARG UV_VERSION=0.10.7
 
 # Stage 1: Build frontend assets
-FROM node:${NODE_VERSION_LOCK}-alpine AS npm
+FROM node:${NODE_VERSION}-alpine AS npm
 WORKDIR /code
 COPY ./static/package*.json /code/static/
 RUN cd /code/static && npm ci

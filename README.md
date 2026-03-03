@@ -50,6 +50,23 @@ chmod +x build_local.sh
 
 The script will automatically detect your host architecture, clone the version specified in upstream-version.txt, and create a local image named simplelogin:local.
 
+## 🩹 Modern UI Patch
+
+This repository includes an optional patch (`modern-ui.patch`) to apply the new, modern SimpleLogin user interface. 
+
+### In CI/CD (GitHub Actions)
+When running the workflow manually via `workflow_dispatch`, you can set the `apply_patch` parameter to `true`. By default, it builds the "original" upstream version. 
+
+To make it the default for automated builds (on push), update the `APPLY_PATCH` environment variable in `.github/workflows/docker-publish.yml` to `true`.
+
+### Local Build
+To apply the patch during a local build, use the `--patch` flag:
+
+```bash
+./build_local.sh --patch
+```
+The resulting image will be tagged as `simplelogin:local-modern-ui`.
+
 ---
 
 ## Usage
