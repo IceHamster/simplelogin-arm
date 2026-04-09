@@ -2,7 +2,7 @@
 
 ARG NODE_VERSION=10.17.0
 # renovate: datasource=github-releases packageName=astral-sh/uv
-ARG UV_VERSION=0.11.3
+ARG UV_VERSION=0.11.5
 
 # Stage 1: Build frontend assets
 FROM node:${NODE_VERSION}-alpine AS npm
