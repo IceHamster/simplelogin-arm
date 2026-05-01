@@ -54,7 +54,7 @@ ENV PATH="/code/.venv/bin:$PATH" \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    netcat-traditional ca-certificates libre2-10 gnupg && \
+    netcat-traditional ca-certificates libre2-11 gnupg && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . .
