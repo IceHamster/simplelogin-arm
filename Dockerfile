@@ -14,7 +14,7 @@ RUN cd /code/static && npm ci
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv_source
 
 # Stage 3: Builder
-FROM ubuntu:26.04@sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb AS builder
+FROM ubuntu:26.04@sha256:2260313b31c8c011cd2eebe728008efac1b3982be73eb71348ea2648d2c0e09b AS builder
 
 # 1. Set a fixed location for the python installation
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -39,7 +39,7 @@ RUN uv python install && \
     uv sync --no-dev --no-cache
 
 # Stage 4: Final Runtime Image
-FROM ubuntu:26.04@sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
+FROM ubuntu:26.04@sha256:2260313b31c8c011cd2eebe728008efac1b3982be73eb71348ea2648d2c0e09b
 
 WORKDIR /code
 
